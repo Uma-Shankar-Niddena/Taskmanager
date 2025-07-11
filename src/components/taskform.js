@@ -1,5 +1,5 @@
 import './taskform.css';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import ShowTasks from './showTasks';
 import {v4 as uuidv4} from 'uuid'
 
@@ -7,9 +7,13 @@ import {v4 as uuidv4} from 'uuid'
 
 const TaskForm = () => { 
        
+    const getInitialData = () => {
+        const saved = localStorage.getItem('finalData');
+        return saved ? JSON.parse(saved) : [];
+      };
 
     const [submitclicked,setSubm]=useState("false")
-    const [finalData,setFinalData]=useState([])
+    const [finalData,setFinalData]=useState(getInitialData)
     const [formData, setFormData] = useState({
        id:'',
         peru: '',
@@ -27,7 +31,10 @@ const TaskForm = () => {
             [name]: value
         });
     };
-
+    useEffect(() => {
+        localStorage.setItem('finalData', JSON.stringify(finalData));
+      }, [finalData]);
+    
     const handleSubmit = (e) => {
         e.preventDefault();
          setSubm("true")
